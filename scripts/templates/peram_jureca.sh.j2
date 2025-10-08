@@ -28,11 +28,6 @@ if [ ! -f "${eigs}" ]; then
   echo "matching distillation basis not found, exiting"
   exit 0
 fi 
-peram={{ run_path }}/perams_sdb/numvec{{ num_vecs_perams }}/peram_{{ num_vecs_perams }}_cfg{{ cfg_id }}.sdb
-if [ -f "${peram}" ] && [ ! -s "${peram}" ]; then 
-echo "empty peram file ${peram} found, deleitng"
-rm -rf "${peram}"
-fi 
 }
 
 export OPENBLAS_NUM_THREADS=16

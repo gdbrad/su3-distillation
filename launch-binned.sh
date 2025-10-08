@@ -97,7 +97,7 @@ if [ "$convert" = true ]; then
     if [ "$type" = "peram" ]; then
         SDB_DIR="$BASE_DIR/perams_sdb/numvec$numvec"
     elif [ "$type" = "peram_charm" ]; then
-         SDB_DIR="$BASE_DIR/perams_charm_sdb/numvec$numvec"
+         SDB_DIR="$BASE_DIR/perams_charm_sdb"
 
     elif [ "$type" = "eigs" ]; then
         SDB_DIR="$BASE_DIR/eigs_sdb"

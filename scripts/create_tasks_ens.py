@@ -291,8 +291,10 @@ def process_yaml_file(yaml_file, options, env, handler):
             # Determine task-specific subdirectory
             if obj in ['eigs', 'chroma_eigs']:
                 task_dir = 'ini-eigs'
-            elif obj.startswith('peram') or obj.startswith('chroma_peram'):
+            elif obj in ['peram_mg','chroma_peram_mg']:
                 task_dir = 'ini-perams'
+            elif obj in ['peram_charm_mg','chroma_peram_charm_mg']:
+                task_dir = 'ini-perams-charm'
             elif obj in ['meson', 'chroma_meson']:
                 task_dir = 'ini-meson'
             elif obj in ['disco', 'chroma_disco']:
@@ -314,7 +316,7 @@ def process_yaml_file(yaml_file, options, env, handler):
                 ini_out = f'{obj.split("_")[1]}_cfg{cfg_id:02d}.sh'
             elif obj != 'chroma_eigs' and obj.startswith('chroma'):
                 ini_out = f'{obj.split("_")[1]}_cfg{cfg_id:02d}.sh'
-            elif obj == 'peram_charm_mg_eric':
+            elif obj == 'peram_charm_mg':
                 ini_out = f'peram_charm_mg_cfg{cfg_id:02d}.ini.xml'
             elif obj in ['disco', 'eigs']:
                 ini_out = f'{obj}_cfg{cfg_id:02d}.ini.xml'
@@ -335,7 +337,7 @@ def process_yaml_file(yaml_file, options, env, handler):
             filtered_data['disco_displacement_list'] = disco_xml._displacement_list()
             filtered_data['disco_t_sources'] = disco_xml._displacement_list()
             filtered_data['tsrc'] = 24
-            filtered_data['t_sources'] = dataMap.get('prop_t_sources', " ".join(str(i) for i in range(0, dataMap.get('prop_t_fwd', ens_props['NT']), round(dataMap.get('prop_t_fwd', ens_props['NT']) / dataMap.get('num_tsrc', 4)))))
+            filtered_data['t_sources'] = dataMap.get('prop_t_sources', " ".join(str(i) for i in range(0, dataMap.get('prop_t_fwd', ens_props['NT']), round(dataMap.get('prop_t_fwd', ens_props['NT']) / dataMap.get('num_tsrc', 15)))))
             output_xml = handler.templates[obj].render(filtered_data)
             print(f"Writing file {ini_out_path} for object {obj}")
             with open(ini_out_path, 'w') as f:
