@@ -8,20 +8,6 @@ import matplotlib.pyplot as plt
 file = 'pi_cfg1750_2pt_nvec_64_tsrc_16_test.h5'
 
 
-# with h5py.File(file) as f:
-#     tsrcs = list(f.keys())
-#     print(tsrcs)
-#     #data = f['/total_0/mom_0_0_0_mom_0_0_0/Dpi/direct/tsrc_5/cfg_1750'][:]
-#     for keys in f['/pi_000/meson1_light_light'].keys(): 
-#         Lt = 64
-#         for t in range(Lt):
-#             print(keys.split(('_')[-1]))
-#             delta_t = t - int(keys.split(('_')[-1]))
-#             if delta_t < 0:
-#                 _delta_t = delta_t+ Lt
-#                 print(_delta_t)
-
-
 def load_data_tsrc(tsrc_avg: bool):
     """
     Load data for all operators and optionally average over 16 tsrc locations.
@@ -53,15 +39,16 @@ def load_data_tsrc(tsrc_avg: bool):
                     dataset_path = f'{ops}/meson1_light_light/{tsrc}/{dataset}'
                     try:
                         data_array = np.array(f[dataset_path], dtype=np.float64)
+                        data_array[-1] = 0
                         if (ops, int(tsrc.split('_')[-1])) not in data:
                             data[(ops, int(tsrc.split('_')[-1]))] = []
                         data[(ops, int(tsrc.split('_')[-1]))].append(data_array)
                     except ValueError:
                         print(f"Skipping dataset {dataset_path} due to conversion error")
-            
-            if (ops, int(tsrc.split('_')[-1])) in data:
-                data[(ops, int(tsrc.split('_')[-1]))] = np.stack(data[(ops, int(tsrc.split('_')[-1]))])
-                data[(ops, int(tsrc.split('_')[-1]))] = np.roll(data[(ops, int(tsrc.split('_')[-1]))], -int(tsrc.split('_')[-1]) * 4, axis=1)
+            for tsrc in tsrc_groups:
+                if (ops, int(tsrc.split('_')[-1])) in data:
+                    data[(ops, int(tsrc.split('_')[-1]))] = np.stack(data[(ops, int(tsrc.split('_')[-1]))])
+                    data[(ops, int(tsrc.split('_')[-1]))] = np.roll(data[(ops, int(tsrc.split('_')[-1]))], -int(tsrc.split('_')[-1]) * 4, axis=1)
     
     if tsrc_avg:
         avg_data = {}
@@ -77,22 +64,19 @@ def load_data_tsrc(tsrc_avg: bool):
 
 new_data = load_data_tsrc(tsrc_avg=True)
 print(new_data['pi_000'])
-def time_reverse(corr, reverse=True, phase=1, time_axis=0):
-    if reverse:
-        if len(corr.shape) > 1:
-            cr = phase * np.roll(corr[:, ::-1], 1, axis=time_axis)
-            cr[:, 0] = phase * cr[:, 0]
-        else:
-            cr = phase * np.roll(corr[::-1], 1)
-            cr[0] = phase * cr[0]
-    else:
-        cr = phase * corr
-    return cr
-# tr = time_reverse(corr=data)
+
+def fold_data(arr, axis=1):
+    T = arr.shape[axis]
+    if T % 2 == 1:
+        raise ValueError('temporal extent should be even')
+
+    folded_avg = (np.array(arr) + np.flip(arr, axis=axis))/2
+    return np.take(folded_avg, range(int(T/2)), axis=axis)
 
 new_data = load_data_tsrc(tsrc_avg=True)
 _new_data = np.array(new_data['pi_000'][0])
 print(_new_data)
+folded_data = fold_data(new_data)
 
 # print("tr",tr)
 # print(data.shape)
@@ -100,8 +84,9 @@ print(_new_data)
 # data_fold = 0.5*(data + np.roll(tr,0))
 # #print(data)
 import matplotlib.pyplot
-plt.plot(np.arange(64), _new_data, '.', )
-plt.yscale('log')
+plt.plot(np.arange(32), folded_data, '.', )
+#plt.yscale('log')
 #plt.legend()
+plt.ylim(-2,20)
 plt.savefig('pi.jpg')
 
