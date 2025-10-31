@@ -9,7 +9,16 @@
           <Contractions>
             <mass_label>light</mass_label>
             <num_vecs>{{ num_vecs_perams }}</num_vecs>
-            <t_sources>{{ t_sources }}</t_sources>
+            
+            {% set prop_t_fwd = prop_t_fwd %}
+            {% set num_tsrc = num_tsrc %}
+            {% set t_sources = [] %}
+            {% for i in range(0, prop_t_fwd, num_tsrc) %}
+              {{ i }}
+              {% set _ = t_sources.append(i) %}
+            {% endfor %}
+
+            <t_sources>{{ _ }}</t_sources>
             <Nt_forward>{{ prop_t_fwd }} </Nt_forward>
             <Nt_backward> {{ prop_t_back }} </Nt_backward>
             <decay_dir>3</decay_dir>

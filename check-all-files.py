@@ -1,21 +1,22 @@
 import os
 import argparse
+
+for beta in [3.4,3.6]:
+    dir_path = f"{beta}_s{s}t{}
+    
 DIRECTORIES =  { 
-"meson":             "/p/scratch/exotichadrons/exolaunch/meson_sdb/numvec96",
-"peram":             "/p/scratch/exotichadrons/exolaunch/perams_sdb/numvec96/tsrc-24/",
-"peram_strange":     "/p/scratch/exotichadrons/exolaunch/perams_strange_sdb/",
+"meson":             "/p/scratch/exotichadrons/su3-distillation/meson_sdb/",
+"peram":             "/p/scratch/exotichadrons/exolaunch/perams_sdb/numvec64/",
 }
 
 SDB_PATTERNS = {
     "meson": "meson-{}_cfg{}.sdb",
     "peram": "peram_{}_cfg{}.sdb",
-    "peram_strange": "peram_strange_nv{}_cfg{}.sdb",
 }
 
 H5_PATTERNS = {
     "meson": "meson-{}_cfg{}.h5",
     "peram": "peram_{}_cfg{}.h5",
-    "peram_strange": "peram_strange_nv{}_cfg{}.h5",
 }
 nvecs = [96]
 

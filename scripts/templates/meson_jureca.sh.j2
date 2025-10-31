@@ -11,10 +11,12 @@
 #SBATCH -e {{ run_path }}/chroma_out/meson{{ cfg_id }}.err
 
 export USERINSTALLATIONS=/p/project1/cslnpp/slnpp032/QCD/JUWELS_BOOSTER_EASYBUILD/TEST_INSTALL/
-
-ml GCC
-ml ParaStationMPI
-ml CHROMA
+ml Stages/2025
+ml GCC/13.3.0
+ml ParaStationMPI/5.10.0-1
+ml UCX-settings/RC-CUDA
+ml MPI-settings/CUDA
+ml CHROMA/2025-10-29devel
 vers=jwb_pmpi
 
 chroma=${EBROOTCHROMA}/bin/chroma

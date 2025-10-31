@@ -123,6 +123,7 @@ class ChromaOptions(BaseModel):
     prop_chroma_minutes: int
     prop_mass_charm_label: str
     prop_t_sources: str
+    num_tsrcs: int
     prop_t_back: int
     prop_nvec: int
     prop_zphases: str
@@ -337,7 +338,8 @@ def process_yaml_file(yaml_file, options, env, handler):
             filtered_data['disco_displacement_list'] = disco_xml._displacement_list()
             filtered_data['disco_t_sources'] = disco_xml._displacement_list()
             filtered_data['tsrc'] = 24
-            filtered_data['t_sources'] = dataMap.get('prop_t_sources', " ".join(str(i) for i in range(0, dataMap.get('prop_t_fwd', ens_props['NT']), round(dataMap.get('prop_t_fwd', ens_props['NT']) / dataMap.get('num_tsrc', 15)))))
+            #filtered_data['t_sources'] = dataMap.get('prop_t_sources', " ".join(str(i) for i in range(0, dataMap.get('prop_t_fwd', ens_props['NT']), round(dataMap.get('prop_t_fwd', ens_props['NT']) / dataMap.get('num_tsrc')))))
+            #print(filtered_data['t_sources'])
             output_xml = handler.templates[obj].render(filtered_data)
             print(f"Writing file {ini_out_path} for object {obj}")
             with open(ini_out_path, 'w') as f:
