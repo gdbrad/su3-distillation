@@ -14,6 +14,11 @@ file = 'b3.6_s32t64/b3.6_s32t64_pi_cfg2000_2pt_nvec_64_tsrc_16_test.h5'
 def load_data_tsrc(tsrc_avg: bool):
     """
     Load data for all operators and optionally average over 16 tsrc locations.
+    The rolling of data arrays is done according to the relation:
+
+    delta_t = t- t_src
+    if delta_t <  0:
+        delta_t = delta_t + Lt
     
     Args:
         tsrc_avg (bool): If True, averages data over 16 tsrc locations.
