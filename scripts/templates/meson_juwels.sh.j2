@@ -21,7 +21,7 @@ vers=jwb_pmpi
 
 chroma=${EBROOTCHROMA}/bin/chroma
 
-eigs={{ eigs_path }}/eigs_sdb/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb
+eigs={{ eigs_path }}/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb
 {
 if [ ! -f "${eigs}" ]; then
   echo "matching distillation basis not found, exiting"
@@ -49,5 +49,5 @@ output="$BASE_DIR/chroma_out/meson_{{ meson_nvec }}_cfg{{ cfg_id }}.out"
 export OPTS=" -geom {{ meson_chroma_geometry|join(' ') }}"
 echo "START  "$(date "+%Y-%m-%dT%H:%M")
 {% set num_tasks = meson_slurm_nodes * 4 %}
-srun -n {{ num_tasks }} -c 16 $chroma $OPTS -i $in -o $out -l $log > $output 2>&1
+srun -n {{ num_tasks }} $chroma $OPTS -i $in -o $out -l $log > $output 2>&1
 echo "FINISH JOB "$(date "+%Y-%m-%dT%H:%M")

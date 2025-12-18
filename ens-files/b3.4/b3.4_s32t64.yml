@@ -3,16 +3,19 @@ cfg_path: /p/data1/slnpp/GREGORY/CONFIGS/NF3P1/B3.4/B3.4_M-0.040M0.33_L32T64/NS8
 cfg_name: test_b3.4_m-0.040m0.33_l32t64_nf3p1_cfg_
 
 # slurm job options 
-run_path: /p/scratch/exotichadrons/exolaunch/a085m200
+run_path: /p/scratch/exflash/dpi-data/b3.4-s32t64
 num_gpu: 1
 facility: jureca
+partition: dc-gpu
+account: exncmf 
 superbblas_threads: 16
 omp_threads: 16
+eigs_path: /p/scratch/exflash/dpi-data/b3.4-s32t64/eigs_sdb
 
 max_moms_per_job: 000
 
 # ensemble properties 
-ens_short: a085m200
+ens_short: b3.4_s32t64
 ens_long: test_b3.4_m-0.040m0.33_l32t64_nf3p1
 cfgs: 10073
 cfg_i: 200

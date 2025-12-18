@@ -1,1 +1,1 @@
-./launch-binned.sh -e b3.4_s24t64 -n 64 -t peram -r 8 --convert -c 2040  
+./convert-sdb.sh -e b3.4-s24t64-test2 -n 64 -t peram_charm peram -r 8 --convert  

@@ -3,10 +3,14 @@ cfg_path: /p/data1/slnpp/GREGORY/CONFIGS/NF3P1/B3.4/B3.4_M-0.040M0.33_L24T64/NS8
 cfg_name: test_b3.4_m-0.040m0.33_l24t64_nf3p1_cfg_
 
 # slurm job options 
-run_path: /p/scratch/exotichadrons/exolaunch/a085m200
+run_path: /p/scratch/exflash/dpi-data/b3.4-s24t64
 num_gpu: 1
 facility: jureca
+account: exncmf
+partition: dc-gpu
 superbblas_threads: 16
+
+eigs_path: /p/scratch/exotichadrons/su3-distillation/data/b3.4_s24t64/eigs_sdb
 omp_threads: 16
 
 max_moms_per_job: 000
@@ -33,13 +37,14 @@ eigs_tasks_node: 1
 prop_slurm_nodes: 4
 prop_num_gpu: 4
 prop_chroma_geometry: [2, 2, 2, 2] 
-prop_chroma_minutes: 100
+prop_chroma_minutes: 45
 prop_mass_light_label: -0.040
 prop_mass_strange_label: 0.25
 prop_mass_charm_label: 0.33 
 prop_t_fwd: 64
 prop_t_back: 0
 prop_nvec: 64
+num_tsrc: 8
 
 prop_zphases: 0.00
 
@@ -53,7 +58,7 @@ max_iter: 500
 meson_slurm_nodes: 4
 meson_chroma_max_tslices_in_contraction: 64 # as large as possible
 meson_chroma_geometry: [2, 2, 2, 2]
-meson_chroma_minutes: 200
+meson_chroma_minutes: 60
 meson_chroma_parts: 4 # split the time slices into this many different files
 meson_nvec: 64 #must be same as peram_nvec
 meson_zphases: [0.00,2.00] #SPLIT THIS CHROMA TAKES WITHOUT COMMA OR []

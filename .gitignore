@@ -1,5 +1,7 @@
-b3.4*
-b3.6*
+b3.4_*
+b3.6_*
+b3.4-*
+b3.6-*
 analysis
 eric-l40t64
 eric-l40t64-serial

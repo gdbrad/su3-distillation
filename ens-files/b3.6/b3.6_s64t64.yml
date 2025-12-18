@@ -4,8 +4,9 @@ cfg_name: test_b3.6_m-0.013m0.25_l64t64_nf3p1_cfg_
 
 # slurm job options 
 run_path: /p/scratch/exotichadrons/exolaunch/a085m200
+eigs_path: /p/data1/slnpp/bradley1/b3.6_s64t64/eigs_sdb
 num_gpu: 1
-facility: jureca
+facility: juwels
 superbblas_threads: 16
 omp_threads: 16
 
@@ -15,9 +16,9 @@ max_moms_per_job: 000
 ens_short: a085m200
 ens_long: test_b3.6_m-0.013m0.25_l64t64_nf3p1
 cfgs: 251
-cfg_i: 400
+cfg_i: 120
 cfg_f: 9960
-cfg_d: 50 #cfg step size 
+cfg_d: 40 #cfg step size 
 #regular eigs inputs
 num_iter: 50
 num_orthog: 20
@@ -39,6 +40,7 @@ prop_mass_charm_label: 0.25
 prop_t_fwd: 64
 prop_t_back: 0
 prop_nvec: 64
+num_tsrc: 8
 
 prop_zphases: 0.00
 
@@ -49,10 +51,10 @@ precision: 1e-08
 max_iter: 500
 
 # meson options 
-meson_slurm_nodes: 4
+meson_slurm_nodes: 8
 meson_chroma_max_tslices_in_contraction: 64 # as large as possible
-meson_chroma_geometry: [2, 2, 2, 2]
-meson_chroma_minutes: 100
+meson_chroma_geometry: [2, 2, 2, 4]
+meson_chroma_minutes: 15
 meson_chroma_parts: 4 # split the time slices into this many different files
 meson_nvec: 64 #must be same as peram_nvec
 meson_zphases: [0.00,2.00] #SPLIT THIS CHROMA TAKES WITHOUT COMMA OR []

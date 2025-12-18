@@ -87,12 +87,12 @@ for beta=3.4
     if info['mc'] is not None:
         info["cfg_path"] = f"/p/data1/slnpp/GREGORY/CONFIGS/NF3P1/B{info['beta']}/B{info['beta']}_M-{info['mud']}M{info['mc']}_L{info['NL']}T{info['NT']}/NS8_LS1_G2"
         info["cfg_name"] = f"test_b{info['beta']}_m{info['mud']}m{info['mc']}_l{info['NL']}t{info['NT']}_nf3p1_cfg_"
-        info["run_path"] = f"/p/scratch/exotichadrons/su3-distillation/{short_tag}"
+        #info["run_path"] = f"/p/scratch/exflash/su3-distillation-juwels/{short_tag}"
     else:
 
         info["cfg_path"] = f"/p/project1/exotichadrons/pederiva/6stout/beta_{info['beta']}/ms_{info['ms']}/mud_-{info['mud']}/s{info['NL']}t{info['NT']}/cnfg/"
         info["cfg_name"] = f"b{info['beta']}_ms{info['ms']}_mud-{info['mud']}_s{info['NL']}t{info['NT']}-{info['P']}-n_cfg_"
-        info["run_path"] = f"/p/scratch/exotichadrons/exolaunch/{short_tag}"
+        #info["run_path"] = f"/p/scratch/exotichadrons/exolaunch/{short_tag}"
     
     return info
 
@@ -100,8 +100,12 @@ class ChromaOptions(BaseModel):
     """Chroma run options for launching jobs."""
     # Slurm job options
     code_dir: str
+    account: str 
     num_gpu: int
     max_moms_per_job: int
+    facility: str 
+    eigs_path: str 
+    partition: str 
     
     # Ensemble properties
     cfg_i: int
@@ -175,11 +179,13 @@ class TaskHandler:
             'disco': env.get_template('disco.jinja.xml'),
             'chroma_eigs': env.get_template('eigs.sh.j2'),
             'chroma_peram': env.get_template('peram_jureca.sh.j2'),
-            'chroma_peram_mg': env.get_template('peram_jureca.sh.j2'),
-            'chroma_peram_charm_mg': env.get_template('peram_charm_jureca.sh.j2'),
+            'chroma_peram_mg': env.get_template('peram_juwels.sh.j2'),
+            'chroma_peram_charm_mg': env.get_template('peram_charm_juwels.sh.j2'),
             'chroma_peram_clover': env.get_template('peram_clover.sh.j2'),
             'chroma_peram_charm_clover': env.get_template('peram_charm_clover.sh.j2'),
-            'chroma_meson': env.get_template('meson_jureca.sh.j2'),
+            'chroma_meson': env.get_template('meson_juwels.sh.j2'),
+            'chroma_meson_jureca': env.get_template('meson_jureca.sh.j2'),
+
             'chroma_disco': env.get_template('disco.sh.j2')
         }
         self.xml_classes = {
@@ -195,6 +201,8 @@ class TaskHandler:
             'disco': disco_xml.Disco,
             'chroma_eigs': ChromaOptions,
             'chroma_meson': ChromaOptions,
+            'chroma_meson_jureca': ChromaOptions,
+
             'chroma_peram': ChromaOptions,
             'chroma_peram_mg': ChromaOptions,
             'chroma_peram_charm_mg': ChromaOptions,
@@ -231,10 +239,14 @@ def process_yaml_file(yaml_file, options, env, handler):
     additional_dirs = ['eigs_sdb', 'perams_sdb', 'meson_sdb', 'chroma_out','perams_charm_sdb']
     
     # Create run_path and additional directories
-    run_path = dataMap['run_path']
-    print(f"Attempting to create directories in run_path: {run_path}")
+    # if dataMap['facility']== 'juwels': 
+    #     run_path = f'/p/scratch/exflash/{ens_short}'
+    # else:
+    #     run_path = dataMap['run_path']
+    # print(f"Attempting to create directories in run_path: {run_path}")
     
     # Ensure run_path exists
+    run_path = dataMap['run_path']
     try:
         os.makedirs(run_path, exist_ok=True)
         print(f"Ensured base run_path exists: {run_path}")
@@ -261,8 +273,6 @@ def process_yaml_file(yaml_file, options, env, handler):
             run_objects.extend(['eigs', 'chroma_eigs'])
         elif 'peram_mg' == task:
             run_objects.extend(['peram_mg', 'chroma_peram_mg'])
-        elif 'peram_strange_mg' == task:
-            run_objects.extend(['peram_strange_mg', 'chroma_peram_mg'])
         elif 'peram_charm_mg' == task:
             run_objects.extend(['peram_charm_mg', 'chroma_peram_charm_mg'])
         elif 'peram_charm_mg_eric' == task:
@@ -337,7 +347,7 @@ def process_yaml_file(yaml_file, options, env, handler):
             filtered_data['displacement_list'] = meson_xml._displacement_list()
             filtered_data['disco_displacement_list'] = disco_xml._displacement_list()
             filtered_data['disco_t_sources'] = disco_xml._displacement_list()
-            filtered_data['tsrc'] = 24
+            #filtered_data['tsrc'] = 24
             #filtered_data['t_sources'] = dataMap.get('prop_t_sources', " ".join(str(i) for i in range(0, dataMap.get('prop_t_fwd', ens_props['NT']), round(dataMap.get('prop_t_fwd', ens_props['NT']) / dataMap.get('num_tsrc')))))
             #print(filtered_data['t_sources'])
             output_xml = handler.templates[obj].render(filtered_data)
@@ -369,7 +379,6 @@ if __name__ == '__main__':
     parser.add_argument('--ini_dir', type=str, required=False, help='Directory containing YAML files for ensembles')
     parser.add_argument('-l', '--list_tasks', nargs='+', required=True, help='List of tasks to generate (e.g., eigs, peram, meson, disco)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing XML and shell scripts')
-    parser.add_argument('--run_dir', default='', help='Run directory (default: %(default)s)')
     parser.add_argument('--test', action='store_true', help='Run in test mode')
 
     options = parser.parse_args()

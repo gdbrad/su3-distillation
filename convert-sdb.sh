@@ -2,7 +2,7 @@
 
 usage() {
     echo "Usage: $0 -e <ensemble> -n <numvec> -t <type> [-c <cfg_numbers>] [-s <skip_range>] [-r <tsrc>] [--convert] [--test]"
-    echo "  -e <ensemble>   : Specify the ensemble (e.g., 'b3.6_s48t64',)"
+    echo "  -e <ensemble>   : path to the ensemble (e.g., 'b3.6_s48t64',)"
     echo "  -n <numvec>     : Specify the numvec value (e.g., 32, 64, 128, etc.)"
     echo "  -t <type>       : Specify the type ('meson', 'peram', 'peram_strange', 'eigs')"
     echo "  -c <cfg_numbers>: Specify specific configuration numbers to process (comma-separated, e.g., '101,1031,1051')"
@@ -62,7 +62,8 @@ if [ "$type" != "meson" ] && [ "$type" != "peram" ] && [ "$type" != "peram_charm
 fi
 
 # Set BASE_DIR based on ensemble and type
-BASE_DIR="/p/scratch/exotichadrons/su3-distillation/$ensemble"
+BASE_DIR="/p/scratch/exflash/dpi-data/$ensemble"
+#BASE_DIR="/p/scratch/exflash/dpi-contractions/cnfg7960"
 
 if [ ! -d "$BASE_DIR" ]; then
     echo "Error: Ensemble directory $BASE_DIR does not exist."
@@ -95,7 +96,7 @@ if [ "$convert" = true ]; then
 
     # Set SDB_DIR based on type and ensemble
     if [ "$type" = "peram" ]; then
-        SDB_DIR="$BASE_DIR/perams_sdb/numvec$numvec"
+        SDB_DIR="$BASE_DIR/perams_sdb"
     elif [ "$type" = "peram_charm" ]; then
          SDB_DIR="$BASE_DIR/perams_charm_sdb"
 
@@ -105,7 +106,7 @@ if [ "$convert" = true ]; then
         SDB_DIR="$BASE_DIR/${type}_sdb"
 
     fi
-    H5_DIR="/p/scratch/exotichadrons/su3-distillation/h5-out"
+    H5_DIR="/p/scratch/exflash/su3-distillation-juwels/h5-out"
     # simple chroma input file for running conversions (just does a dummy plaquette measurement)
     in="$H5_DIR/simple.ini.xml"
 
@@ -154,9 +155,9 @@ if [ "$convert" = true ]; then
                     echo "running conversion for $sdb_file..."
 
                     if [ "$test" = true ]; then
-                        echo "srun --account=exotichadrons --partition=dc-gpu -t 00:15:00 --nodes=1 --ntasks-per-node=1 --gres=gpu:1 --threads-per-core=1 -n 1 -c 1 $object $OPTS -i $in -o $out -l $log > $stdout 2>&1"
+                        echo "srun --account=exflash --partition=dc-gpu -t 00:05:00 --nodes=1 --ntasks-per-node=1 --gres=gpu:1 --threads-per-core=1 -n 1 -c 1 $object $OPTS -i $in -o $out -l $log > $stdout 2>&1"
                     else
-                        srun --account=exotichadrons --partition=dc-gpu-devel -t 00:10:00 --nodes=1 --ntasks-per-node=1 --gres=gpu:1 --threads-per-core=1 -n 1 -c 1 $object $OPTS -i $in -o $out -l $log > $stdout 2>&1
+                        srun --account=exncmf --partition=dc-gpu -t 00:05:00 --nodes=1 --ntasks-per-node=1 --gres=gpu:1 --threads-per-core=1 -n 1 $object $OPTS -i $in -o $out -l $log > $stdout 2>&1
                     fi
                 fi
             fi
