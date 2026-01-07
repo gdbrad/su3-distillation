@@ -176,6 +176,7 @@ class TaskHandler:
             'peram_charm_mg': env.get_template('peram_charm_multigrid_eric.jinja.xml'),
             'peram': env.get_template('peram_multigrid.jinja.xml'),
             'meson': env.get_template('meson_eric.jinja.xml'),
+            'meson2': env.get_template('meson2_eric.jinja.xml'),
             'disco': env.get_template('disco.jinja.xml'),
             'chroma_eigs': env.get_template('eigs.sh.j2'),
             'chroma_peram': env.get_template('peram_jureca.sh.j2'),
@@ -184,12 +185,15 @@ class TaskHandler:
             'chroma_peram_clover': env.get_template('peram_clover.sh.j2'),
             'chroma_peram_charm_clover': env.get_template('peram_charm_clover.sh.j2'),
             'chroma_meson': env.get_template('meson_juwels.sh.j2'),
+            'chroma_meson2': env.get_template('meson2_jureca.sh.j2'),
             'chroma_meson_jureca': env.get_template('meson_jureca.sh.j2'),
+            'chroma_meson2_jureca': env.get_template('meson2_jureca.sh.j2'),
 
             'chroma_disco': env.get_template('disco.sh.j2')
         }
         self.xml_classes = {
             'eigs': eigs_xml.Eigs,
+
             'peram': perams_xml.Perams,
             'peram_mg': perams_xml.Perams,
             'peram_strange_mg': perams_xml.Perams,
@@ -197,11 +201,18 @@ class TaskHandler:
             'peram_charm_mg_eric': perams_xml.Perams,
             'peram_clover': perams_xml.Perams,
             'peram_charm_clover': perams_xml.Perams,
+
             'meson': meson_xml.Meson,
+            'meson2': meson_xml.Meson,
+
             'disco': disco_xml.Disco,
             'chroma_eigs': ChromaOptions,
             'chroma_meson': ChromaOptions,
+            'chroma_meson2': ChromaOptions,
+
             'chroma_meson_jureca': ChromaOptions,
+            'chroma_meson2_jureca': ChromaOptions,
+
 
             'chroma_peram': ChromaOptions,
             'chroma_peram_mg': ChromaOptions,
@@ -236,7 +247,7 @@ def process_yaml_file(yaml_file, options, env, handler):
     dataMap['meson_nvec'] = ens_props['NT']
     
     # Define additional directories to create in run_path
-    additional_dirs = ['eigs_sdb', 'perams_sdb', 'meson_sdb', 'chroma_out','perams_charm_sdb']
+    additional_dirs = ['eigs_sdb', 'perams_sdb', 'meson_sdb','meson2_sdb' ,'chroma_out','perams_charm_sdb']
     
     # Create run_path and additional directories
     # if dataMap['facility']== 'juwels': 
@@ -246,17 +257,17 @@ def process_yaml_file(yaml_file, options, env, handler):
     # print(f"Attempting to create directories in run_path: {run_path}")
     
     # Ensure run_path exists
-    run_path = dataMap['run_path']
+    data_path = dataMap['data_path']
     try:
-        os.makedirs(run_path, exist_ok=True)
-        print(f"Ensured base run_path exists: {run_path}")
+        os.makedirs(data_path, exist_ok=True)
+        print(f"Ensured base data_path exists: {data_path}")
     except Exception as e:
-        print(f"Error creating run_path {run_path}: {e}")
+        print(f"Error creating data_path {data_path}: {e}")
         raise
     
     # Create additional directories
     for dir_name in additional_dirs:
-        dir_path = os.path.join(run_path, dir_name)
+        dir_path = os.path.join(data_path, dir_name)
         try:
             os.makedirs(dir_path, exist_ok=True)
             if os.path.exists(dir_path):
@@ -285,6 +296,8 @@ def process_yaml_file(yaml_file, options, env, handler):
             run_objects.extend(['peram', 'chroma_peram'])
         elif 'meson' == task:
             run_objects.extend(['meson', 'chroma_meson'])
+        elif 'meson2' == task:
+            run_objects.extend(['meson2', 'chroma_meson2'])
         elif 'disco' == task:
             run_objects.extend(['disco', 'chroma_disco'])
 
@@ -308,6 +321,8 @@ def process_yaml_file(yaml_file, options, env, handler):
                 task_dir = 'ini-perams-charm'
             elif obj in ['meson', 'chroma_meson']:
                 task_dir = 'ini-meson'
+            elif obj in ['meson2', 'chroma_meson2']:
+                task_dir = 'ini-meson2'
             elif obj in ['disco', 'chroma_disco']:
                 task_dir = 'ini-disco'
             else:
@@ -343,7 +358,10 @@ def process_yaml_file(yaml_file, options, env, handler):
             # Prepare data for rendering
             filtered_data = dataMap.copy()  # Use all dataMap entries
             filtered_data['cfg_id'] = f'{cfg_id:02d}'
-            filtered_data['momentum_list'] = meson_xml._gen_mom_list()
+            if obj == 'meson2':
+                filtered_data['momentum_list'] = meson_xml._gen_mom_list2()
+            elif obj=='meson':
+                filtered_data['momentum_list'] = meson_xml._gen_mom_list()
             filtered_data['displacement_list'] = meson_xml._displacement_list()
             filtered_data['disco_displacement_list'] = disco_xml._displacement_list()
             filtered_data['disco_t_sources'] = disco_xml._displacement_list()

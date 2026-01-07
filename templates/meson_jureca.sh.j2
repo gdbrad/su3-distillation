@@ -21,7 +21,7 @@ vers=jwb_pmpi
 
 chroma=${EBROOTCHROMA}/bin/chroma
 
-eigs={{ eigs_path }}/eigs_sdb/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb
+eigs={{ eigs_path }}/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb
 {
 if [ ! -f "${eigs}" ]; then
   echo "matching distillation basis not found, exiting"

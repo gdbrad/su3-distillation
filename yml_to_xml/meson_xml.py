@@ -12,9 +12,21 @@ def _gen_mom_list():
         "0 2 0", "0 -2 0", "0 0 2",
         "0 0 -2", "3 0 0", "-3 0 0",
         "0 3 0", "0 -3 0", "0 0 3",
-        "0 0 -3"
+        "0 0 -3", "1 1 0", "-1 -1 0",
+        "1 1 1", "-1 -1 -1",
+        "2 1 0", "2 1 1"
     ]
    return momentum_list
+
+def _gen_mom_list2():
+     momentum_list_2: List[str]= [
+        "1 1 0", "-1 -1 0",
+        "1 1 1", "-1 -1 -1",
+        "2 1 0", "2 1 1"
+    ]
+     
+     return momentum_list_2
+
 
 
 def  _displacement_list()->List[str]: 
@@ -47,7 +59,15 @@ class Meson(BaseModel):
         "0 2 0", "0 -2 0", "0 0 2",
         "0 0 -2", "3 0 0", "-3 0 0",
         "0 3 0", "0 -3 0", "0 0 3",
-        "0 0 -3"
+        "0 0 -3", "1 1 0", "-1 -1 0",
+        "1 1 1", "-1 -1 -1",
+        "2 1 0", "2 1 1"
+    ]
+
+    momentum_list_2: List[str]= [
+        "1 1 0", "-1 -1 0",
+        "1 1 1", "-1 -1 -1",
+        "2 1 0", "2 1 1"
     ]
     # momentum_list: List[str] = [
     #     "0 0 0", "1 0 0", "-1 0 0"
@@ -70,6 +90,4 @@ class Meson(BaseModel):
     link_smear_num: int
     no_smear_dir: int
     colorvec_out: str  
-
-
     cfg_path: str

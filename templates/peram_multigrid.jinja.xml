@@ -7,7 +7,7 @@
         <Frequency>1</Frequency>
         <Param>
           <Contractions>
-            <mass_label>charm</mass_label>
+            <mass_label>light</mass_label>
             <num_vecs> {{ num_vecs_perams }}</num_vecs>
             {% set step = num_tsrc -%}
             {% set max_val = prop_t_fwd -%}
@@ -30,7 +30,7 @@
             <numRetries>1</numRetries>
             <FermionAction>
                 <FermAct>CLOVER</FermAct>
-                <Mass>{{ prop_mass_charm_label }}</Mass>
+                <Mass>{{ prop_mass_light_label }}</Mass>
                 <clovCoeff>{{ prop_clov_coeff }}</clovCoeff>
                 <FermState>
                     <Name>STOUT_FERM_STATE</Name>
@@ -47,7 +47,7 @@
             <InvertParam>
                 <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
                 <CloverParams>
-                    <Mass>{{ prop_mass_charm_label }}</Mass>
+                    <Mass>{{ prop_mass_light_label }}</Mass>
                     <clovCoeff>{{ prop_clov_coeff }}</clovCoeff>
                 </CloverParams>
                 <RsdTarget>{{ precision }}</RsdTarget>
@@ -113,8 +113,8 @@
         </Param>
         <NamedObject>
           <gauge_id>default_gauge_field</gauge_id>
-          <colorvec_files><elem>{{ eigs_path }}/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb</elem></colorvec_files>
-          <prop_op_file>{{ run_path }}/perams_charm_sdb/peram_charm_{{ num_vecs_perams }}_cfg{{ cfg_id }}.sdb</prop_op_file>
+          <colorvec_files><elem>{{ eigs_path }}/eigs_numvecs96_cfg{{ cfg_id }}.sdb</elem></colorvec_files>
+          <prop_op_file>{{ data_path }}/perams_sdb/peram_{{ num_vecs_perams }}_cfg{{ cfg_id }}.sdb</prop_op_file>
         </NamedObject>
       </elem>
       <elem>

@@ -2,12 +2,12 @@
 # template for computing perambulators with chroma 
 
 #SBATCH --nodes={{ prop_slurm_nodes }}
-#SBATCH --partition=booster
-#SBATCH --account=exflash
+#SBATCH --partition={{ partition }}
+#SBATCH --account={{ account }}
 #SBATCH -t {{ prop_chroma_minutes }}
 #SBATCH --gres=gpu:4
-#SBATCH -o {{ run_path }}/chroma_out/peram{{ cfg_id }}.out
-#SBATCH -e {{ run_path }}/chroma_out/peram{{ cfg_id }}.err
+#SBATCH -o {{ run_path }}/chroma_out/peram_charm{{ cfg_id }}.out
+#SBATCH -e {{ run_path }}/chroma_out/peram_charm{{ cfg_id }}.err
 
 export USERINSTALLATIONS=/p/project1/cslnpp/slnpp032/QCD/JUWELS_BOOSTER_EASYBUILD/TEST_INSTALL/
 ml Stages/2025
@@ -38,19 +38,17 @@ export QUDA_ENABLE_DEVICE_MEMORY_POOL=0
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 
 BASE_DIR={{ run_path }}
-if [ ! -d "$BASE_DIR/res/log/perams" ]; then
-  mkdir -p "$BASE_DIR/res/log/perams";
+if [ ! -d "$BASE_DIR/res/log/perams-charm" ]; then
+  mkdir -p "$BASE_DIR/res/log/perams-charm";
 fi 
-if [ ! -d "$BASE_DIR/res/out/perams" ]; then
-  mkdir -p "$BASE_DIR/res/out/perams";
-fi
-if [ ! -d "$BASE_DIR/chroma_out" ]; then
-  mkdir -p "$BASE_DIR/chroma_out";
-fi  
-log=$BASE_DIR/res/log/perams/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.log
-in=$BASE_DIR/ini-perams/cnfg{{ cfg_id }}/peram_mg_cfg{{ cfg_id }}.ini.xml
-out=$BASE_DIR/res/out/perams/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out.xml
-stdout="$BASE_DIR/chroma_out/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out"
+if [ ! -d "$BASE_DIR/res/out/perams-charm" ]; then
+# Bash one-liner (works in Linux/macOS/WSL)
+  mkdir -p "$BASE_DIR/res/out/perams-charm";
+fi 
+log=$BASE_DIR/res/log/perams-charm/perams_charm_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.log
+in=$BASE_DIR/ini-perams-charm/cnfg{{ cfg_id }}/peram_charm_mg_cfg{{ cfg_id }}.ini.xml
+out=$BASE_DIR/res/out/perams-charm/perams_charm_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out.xml
+stdout="$BASE_DIR/chroma_out/perams_charm_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out"
 
 export OPTS=" -geom {{ prop_chroma_geometry|join(' ') }}"
 echo "START  "$(date "+%Y-%m-%dT%H:%M")

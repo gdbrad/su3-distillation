@@ -37,7 +37,7 @@
       <NamedObject>
         <gauge_id>default_gauge_field</gauge_id>
         <colorvec_files><elem>{{ eigs_path }}/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb</elem></colorvec_files>
-        <meson_op_file>{{ run_path }}/meson_sdb/meson-{{ meson_nvec }}_cfg{{ cfg_id }}.sdb</meson_op_file>
+        <meson_op_file>{{ data_path }}/meson_sdb/meson-{{ meson_nvec }}_cfg{{ cfg_id }}.sdb</meson_op_file>
       </NamedObject>
     </elem>
   </InlineMeasurements>
