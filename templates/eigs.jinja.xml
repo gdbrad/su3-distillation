@@ -8,15 +8,15 @@
         <Param>
           <num_vecs>{{ num_vecs }}</num_vecs>
           <decay_dir>3</decay_dir>
-          <t_start>{{ t_start }} </t_start>
+          <t_start>{{ t_start}} </t_start>
           <Nt_forward>{{ NT }}</Nt_forward>
           <phase>{{ phase|join(' ') }}</phase>
           <write_fingerprint>false</write_fingerprint>
           <LinkSmearing>
-            <LinkSmearingType>STOUT_SMEAR</LinkSmearingType>
-            <link_smear_fact>0.1</link_smear_fact>
-            <link_smear_num>10</link_smear_num>
-            <no_smear_dir>3</no_smear_dir>
+            <LinkSmearingType>{{ LinkSmearingType }}</LinkSmearingType>
+            <link_smear_fact>{{ link_smear_fact }}</link_smear_fact>
+            <link_smear_num>{{ link_smear_num }}</link_smear_num>
+            <no_smear_dir>{{ no_smear_dir }}</no_smear_dir>
           </LinkSmearing>
         </Param>
         <NamedObject>
@@ -37,7 +37,7 @@
     </RNG>
     <Cfg>
       <cfg_type>SZINQIO</cfg_type>
-      <cfg_file>{{ cfg_path }}b{{ beta }}_ms{{ ms }}_mud-{{ mud }}_s{{ NL }}t{{ NT }}-{{ P }}-n_cfg_{{ cfg_id }}.lime</cfg_file>
+      <cfg_file>{{ cfg_path }}/{{ cfg_name }}{{ cfg_id }}.lime</cfg_file>
       <parallel_io>false</parallel_io>
   </Cfg>
 </chroma>

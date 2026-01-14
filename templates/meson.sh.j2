@@ -34,6 +34,8 @@ export OMP_NUM_THREADS=16
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 BASE_DIR={{ run_path }}
+LAUNCH_DIR={{ launch_path }}
+
 if [ ! -d "$BASE_DIR/res/log/meson" ]; then
   mkdir -p "$BASE_DIR/res/log/meson";
 fi 
@@ -42,7 +44,7 @@ if [ ! -d "$BASE_DIR/res/out/meson" ]; then
 fi 
 
 log=$BASE_DIR/res/log/meson/meson_{{ meson_nvec }}_cfg{{ cfg_id }}.log
-in=$BASE_DIR/ini-meson/cnfg{{ cfg_id }}/meson_cfg{{ cfg_id }}.ini.xml
+in=$LAUNCH_DIR/ini-meson/cnfg{{ cfg_id }}/meson_cfg{{ cfg_id }}.ini.xml
 out=$BASE_DIR/res/out/meson/meson_{{ meson_nvec }}_cfg{{ cfg_id }}.out.xml
 output="$BASE_DIR/chroma_out/meson_{{ meson_nvec }}_cfg{{ cfg_id }}.out"
 

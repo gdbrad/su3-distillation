@@ -36,7 +36,7 @@
       </Param>
       <NamedObject>
         <gauge_id>default_gauge_field</gauge_id>
-        <colorvec_files><elem>{{ run_path }}/eigs_sdb/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb</elem></colorvec_files>
+        <colorvec_files><elem>{{ eigs_path }}/eigs_numvecs{{ num_vecs }}_cfg{{ cfg_id }}.sdb</elem></colorvec_files>
         <meson_op_file>{{ data_path }}/meson_sdb/meson-{{ meson_nvec }}_cfg{{ cfg_id }}.sdb</meson_op_file>
       </NamedObject>
     </elem>
@@ -53,7 +53,7 @@
 </RNG>
   <Cfg>
     <cfg_type>SZINQIO</cfg_type>
-    <cfg_file>{{ cfg_path }}b{{ beta }}_ms{{ ms }}_mud-{{ mud }}_s{{ NL }}t{{ NT }}-{{ P }}-n_cfg_{{ cfg_id }}.lime</cfg_file>
+    <cfg_file>{{ cfg_path }}/{{ cfg_name }}{{ cfg_id }}.lime</cfg_file>
     <parallel_io>false</parallel_io>
   </Cfg>
 </chroma>

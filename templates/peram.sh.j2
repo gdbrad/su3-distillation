@@ -38,6 +38,7 @@ export QUDA_ENABLE_DEVICE_MEMORY_POOL=0
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 
 BASE_DIR={{ run_path }}
+LAUNCH_DIR={{ launch_path }}
 if [ ! -d "$BASE_DIR/res/log/perams" ]; then
   mkdir -p "$BASE_DIR/res/log/perams";
 fi 
@@ -48,7 +49,7 @@ if [ ! -d "$BASE_DIR/chroma_out" ]; then
   mkdir -p "$BASE_DIR/chroma_out";
 fi  
 log=$BASE_DIR/res/log/perams/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.log
-in=$BASE_DIR/ini-perams/cnfg{{ cfg_id }}/peram_mg_cfg{{ cfg_id }}.ini.xml
+in=$LAUNCH_DIR/ini-perams/cnfg{{ cfg_id }}/peram_mg_cfg{{ cfg_id }}.ini.xml
 out=$BASE_DIR/res/out/perams/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out.xml
 stdout="$BASE_DIR/chroma_out/perams_{{ cfg_id }}_numvecs-{{ num_vecs_perams }}.out"
 
