@@ -155,11 +155,11 @@ class TaskHandler:
             'meson': env.get_template('meson.jinja.xml'),
             'meson2': env.get_template('meson2.jinja.xml'),
             'disco': env.get_template('disco.jinja.xml'),
-            'peram_unified': env.get_template('peram_unified.jinja.xml'),
+            'peram': env.get_template('peram.jinja.xml'),
             'chroma_eigs': env.get_template('eigs.sh.j2'),
             'chroma_meson': env.get_template('meson.sh.j2'),
             'chroma_meson2': env.get_template('meson2.sh.j2'),
-            'chroma_peram': env.get_template('peram_unified.sh.j2'),
+            'chroma_peram': env.get_template('peram.sh.j2'),
             'chroma_disco': env.get_template('disco.sh.j2')
         }
         self.xml_classes = {
@@ -167,7 +167,7 @@ class TaskHandler:
             'meson': meson_xml.Meson,
             'meson2': meson_xml.Meson,
             'disco': disco_xml.Disco,
-            'peram_unified': perams_xml.Perams,
+            'peram': perams_xml.Perams,
             'chroma_eigs': ChromaOptions,
             'chroma_meson': ChromaOptions,
             'chroma_meson2': ChromaOptions,
@@ -181,7 +181,6 @@ def process_yaml_file(yaml_file, options, env, handler):
     print(f"Processing ensemble: {ens_short}")
     with open(yaml_file) as f:
         dataMap = yaml.safe_load(f)
-    # Derive ensemble parameters
     try:
         ens_props = parse_ensemble(ens_short)
     except ValueError as e:
@@ -239,7 +238,7 @@ def process_yaml_file(yaml_file, options, env, handler):
                 'inverter_type': inverter_type,
                 'flavor': flavor,
             })
-            run_objects.extend(['peram_unified', 'chroma_peram'])
+            run_objects.extend(['peram', 'chroma_peram'])
         elif task == 'meson':
             run_objects.extend(['meson', 'chroma_meson'])
         elif task == 'meson2':
@@ -266,7 +265,7 @@ def process_yaml_file(yaml_file, options, env, handler):
                 task_dir = 'ini-meson2'
             elif obj in ['disco', 'chroma_disco']:
                 task_dir = 'ini-disco'
-            elif obj == 'peram_unified' or obj == 'chroma_peram':
+            elif obj == 'peram' or obj == 'chroma_peram':
                 flavor = dataMap['flavor']
                 inverter_type = dataMap['inverter_type']
                 task_dir = f'ini-perams-{flavor}-{inverter_type}'
@@ -325,20 +324,20 @@ def main(options):
                     yaml_file = os.path.join(root, file)
                     print(f"Processing YAML file: {yaml_file}")
                     process_yaml_file(yaml_file, options, env, handler)
-    elif options.in_file and os.path.isfile(options.in_file):
-        print(f"Processing single YAML file: {options.in_file}")
-        process_yaml_file(options.in_file, options, env, handler)
+    elif options.ini and os.path.isfile(options.ini):
+        print(f"Processing single YAML file: {options.ini}")
+        process_yaml_file(options.ini, options, env, handler)
     else:
         raise ValueError("Please provide a valid --in_file or --ini_dir")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--in_file', type=str, required=False, help='Path to a single YAML input file')
+    parser.add_argument('--ini', type=str, required=False, help='Path to a single YAML input file')
     parser.add_argument('--ini_dir', type=str, required=False, help='Directory containing YAML files for ensembles')
     parser.add_argument('-l', '--list_tasks', nargs='+', required=True, help='List of tasks to generate (e.g., eigs, peram_mg_light, meson, disco)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing XML and shell scripts')
     parser.add_argument('--test', action='store_true', help='Run in test mode')
     options = parser.parse_args()
-    if not (options.in_file or options.ini_dir):
+    if not (options.ini or options.ini_dir):
         parser.error("At least one of --in_file or --ini_dir must be provided")
     main(options)
